@@ -7,9 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C8234F81-78D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{5EB2241A-6348-4680-BB26-9AFF6086803F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyVaultConnector.FunctionApp", "src\KeyVaultConnector.FunctionApp\KeyVaultConnector.FunctionApp.csproj", "{5E426F32-0819-4D23-98BA-BD4FF28D542C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyVaultConnector.FunctionApp", "src\KeyVaultConnector.FunctionApp\KeyVaultConnector.FunctionApp.csproj", "{5E426F32-0819-4D23-98BA-BD4FF28D542C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyVaultConnector.FunctionApp.Tests", "test\KeyVaultConnector.FunctionApp.Tests\KeyVaultConnector.FunctionApp.Tests.csproj", "{AFA119A0-8684-402A-A97A-36B181261606}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyVaultConnector.FunctionApp.Tests", "test\KeyVaultConnector.FunctionApp.Tests\KeyVaultConnector.FunctionApp.Tests.csproj", "{AFA119A0-8684-402A-A97A-36B181261606}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
