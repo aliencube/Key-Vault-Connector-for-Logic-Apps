@@ -24,6 +24,7 @@ namespace KeyVaultConnector.FunctionApp.Modules
             services.AddSingleton<AppSettings>(new AppSettings());
 
             services.AddTransient<IGetSecretsFunction, GetSecretsFunction>();
+            services.AddTransient<IGetSecretFunction, GetSecretFunction>();
         }
     }
 }

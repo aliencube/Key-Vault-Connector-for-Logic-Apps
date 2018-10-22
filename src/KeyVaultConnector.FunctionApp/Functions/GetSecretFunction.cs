@@ -1,32 +1,31 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Aliencube.AzureFunctions.Extensions.DependencyInjection.Abstractions;
 
 using KeyVaultConnector.FunctionApp.Configurations;
+using KeyVaultConnector.FunctionApp.Functions.FunctionOptions;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.KeyVault;
-using Microsoft.Azure.KeyVault.Models;
 using Microsoft.Extensions.Logging;
 
 namespace KeyVaultConnector.FunctionApp.Functions
 {
     /// <summary>
-    /// This represents the function entity to get secrets from Key Vault.
+    /// This represents the function entity to get secret from Key Vault.
     /// </summary>
-    public class GetSecretsFunction : FunctionBase<ILogger>, IGetSecretsFunction
+    public class GetSecretFunction : FunctionBase<ILogger>, IGetSecretFunction
     {
         private readonly AppSettings _settings;
         private readonly IKeyVaultClient _kv;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GetSecretsFunction"/> class.
+        /// Initializes a new instance of the <see cref="GetSecretFunction"/> class.
         /// </summary>
         /// <param name="settings"><see cref="AppSettings"/> instance.</param>
         /// <param name="kv"><see cref="IKeyVaultClient"/> instance.</param>
-        public GetSecretsFunction(AppSettings settings, IKeyVaultClient kv)
+        public GetSecretFunction(AppSettings settings, IKeyVaultClient kv)
         {
             this._settings = settings ?? throw new ArgumentNullException(nameof(settings));
             this._kv = kv ?? throw new ArgumentNullException(nameof(kv));
@@ -37,10 +36,11 @@ namespace KeyVaultConnector.FunctionApp.Functions
         {
             this.Log.LogInformation("C# HTTP trigger function processed a request.");
 
-            var secrets = await this._kv.GetSecretsAsync(this._settings.KeyVault.BaseUri).ConfigureAwait(false);
-            var items = secrets.OfType<SecretItem>().ToList();
+            var opt = options as GetSecretFunctionOptions ?? throw new ArgumentNullException(nameof(options));
 
-            return (TOutput)(IActionResult)new OkObjectResult(items);
+            var secret = await this._kv.GetSecretAsync(this._settings.KeyVault.BaseUri, opt.SecretName).ConfigureAwait(false);
+
+            return (TOutput)(IActionResult)new OkObjectResult(secret);
         }
     }
 }
