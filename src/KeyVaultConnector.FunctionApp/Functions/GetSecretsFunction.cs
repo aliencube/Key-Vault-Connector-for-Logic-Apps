@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 using Aliencube.AzureFunctions.Extensions.DependencyInjection.Abstractions;
 
+using AutoMapper;
+
 using KeyVaultConnector.FunctionApp.Configurations;
+using KeyVaultConnector.FunctionApp.Models;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.KeyVault;
@@ -19,16 +23,19 @@ namespace KeyVaultConnector.FunctionApp.Functions
     public class GetSecretsFunction : FunctionBase<ILogger>, IGetSecretsFunction
     {
         private readonly AppSettings _settings;
+        private readonly IMapper _mapper;
         private readonly IKeyVaultClient _kv;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GetSecretsFunction"/> class.
         /// </summary>
         /// <param name="settings"><see cref="AppSettings"/> instance.</param>
+        /// <param name="mapper"><see cref="IMapper"/> instance.</param>
         /// <param name="kv"><see cref="IKeyVaultClient"/> instance.</param>
-        public GetSecretsFunction(AppSettings settings, IKeyVaultClient kv)
+        public GetSecretsFunction(AppSettings settings, IMapper mapper, IKeyVaultClient kv)
         {
             this._settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            this._mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this._kv = kv ?? throw new ArgumentNullException(nameof(kv));
         }
 
@@ -39,8 +46,9 @@ namespace KeyVaultConnector.FunctionApp.Functions
 
             var secrets = await this._kv.GetSecretsAsync(this._settings.KeyVault.BaseUri).ConfigureAwait(false);
             var items = secrets.OfType<SecretItem>().ToList();
+            var mapped = this._mapper.Map<List<SecretItemModel>>(items);
 
-            return (TOutput)(IActionResult)new OkObjectResult(items);
+            return (TOutput)(IActionResult)new OkObjectResult(mapped);
         }
     }
 }

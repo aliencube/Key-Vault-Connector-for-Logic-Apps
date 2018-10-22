@@ -1,4 +1,6 @@
-﻿using Aliencube.AzureFunctions.Extensions.DependencyInjection.Abstractions;
+﻿using System.Reflection;
+
+using AutoMapper;
 
 using KeyVaultConnector.FunctionApp.Configurations;
 using KeyVaultConnector.FunctionApp.Functions;
@@ -6,6 +8,8 @@ using KeyVaultConnector.FunctionApp.Functions;
 using Microsoft.Azure.KeyVault;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.DependencyInjection;
+
+using Module = Aliencube.AzureFunctions.Extensions.DependencyInjection.Abstractions.Module;
 
 namespace KeyVaultConnector.FunctionApp.Modules
 {
@@ -25,6 +29,8 @@ namespace KeyVaultConnector.FunctionApp.Modules
 
             services.AddTransient<IGetSecretsFunction, GetSecretsFunction>();
             services.AddTransient<IGetSecretFunction, GetSecretFunction>();
+
+            services.AddAutoMapper(Assembly.GetAssembly(this.GetType()));
         }
     }
 }
