@@ -328,3 +328,8 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+# Project specific
+**/KeyVaultConnector.Resources/*.json
+*.local.yaml
+*.local.json
