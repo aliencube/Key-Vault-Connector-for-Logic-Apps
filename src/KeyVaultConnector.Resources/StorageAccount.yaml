@@ -1,0 +1,71 @@
+$schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
+contentVersion: 1.0.0.0
+parameters:
+  location:
+    type: string
+    metadata:
+      description: Location of the Logic App.
+    defaultValue: "[resourceGroup().location]"
+  storageAccountName:
+    type: string
+    metadata:
+      description: Name of Storage Account
+  storageAccountSkuName:
+    type: string
+    metadata:
+      description: SKU Name for the Storage Account
+    allowedValues:
+    - Standard_LRS
+    - Standard_GRS
+    - Standard_ZRS
+    - Standard_RGRS
+    defaultValue: Standard_LRS
+  storageAccountSkuTier:
+    type: string
+    metadata:
+      description: SKU Tier for the Storage Account
+    defaultValue: Standard
+variables:
+  storageAccount:
+    name: "[parameters('storageAccountName')]"
+    apiVersion: "[providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]]"
+    location: "[parameters('location')]"
+    sku:
+      name: "[parameters('storageAccountSkuName')]"
+      tier: "[parameters('storageAccountSkuTier')]"
+  tags:
+    author: Justin Yoo
+    profile: https://twitter.com/justinchronicle
+    projectUrl: https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps
+    repositoryUrl: https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps
+    license: https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/master/LICENSE
+resources:
+- comments: "### RESOURCE - STORAGE ACCOUNT ###"
+  type: Microsoft.Storage/storageAccounts
+  apiVersion: "[variables('storageAccount').apiVersion]"
+  kind: StorageV2
+  location: "[variables('storageAccount').location]"
+  name: "[variables('storageAccount').name]"
+  tags: "[variables('tags')]"
+  sku:
+    name: "[variables('storageAccount').sku.name]"
+    tier: "[variables('storageAccount').sku.tier]"
+  properties:
+    supportsHttpsTrafficOnly: true
+    encryption:
+      keySource: Microsoft.Storage
+      services:
+        blob:
+          enabled: true
+        file:
+          enabled: true
+outputs:
+  storageAccountName:
+    type: string
+    value: "[variables('storageAccount').name]"
+  storageAccountKey:
+    type: string
+    value: "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccount').name), variables('storageAccount').apiVersion).keys[0].value]"
+  storageAccountEndpoint:
+    type: string
+    value: "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccount').name, ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccount').name), variables('storageAccount').apiVersion).keys[0].value, ';EndpointSuffix=core.windows.net')]"

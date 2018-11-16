@@ -1,0 +1,92 @@
+$schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
+contentVersion: 1.0.0.0
+parameters:
+  location:
+    type: string
+    metadata:
+      description: Location of the Consumption Plan.
+    defaultValue: "[resourceGroup().location]"
+  consumptionPlanName:
+    type: string
+    metadata:
+      description: Name of the Consumption Plan.
+  consumptionPlanKind:
+    type: string
+    metadata:
+      description: Kind of the Consumption Plan.
+    allowedValues:
+    - functionapp
+    defaultValue: functionapp
+  consumptionPlanSkuTier:
+    type: string
+    metadata:
+      description: SKU tier for the Consumption Plan.
+    allowedValues:
+    - Dynamic
+    defaultValue: Dynamic
+  consumptionPlanSkuSize:
+    type: string
+    metadata:
+      description: SKU size for the Consumption Plan.
+    allowedValues:
+    - Y1
+    defaultValue: Y1
+  consumptionPlanSkuName:
+    type: string
+    metadata:
+      description: SKU name for the Consumption Plan.
+    allowedValues:
+    - Y1
+    defaultValue: Y1
+  consumptionPlanSkuFamily:
+    type: string
+    metadata:
+      description: SKU family for the Consumption Plan.
+    allowedValues:
+    - "Y"
+    defaultValue: "Y"
+  consumptionPlanSkuCapacity:
+    type: integer
+    metadata:
+      description: SKU capacity for the Consumption Plan.
+    minValue: 0
+    maxValue: 0
+    defaultValue: 0
+variables:
+  consumptionPlan:
+    name: "[parameters('consumptionPlanName')]"
+    apiVersion: "[providers('Microsoft.Web', 'serverfarms').apiVersions[0]]"
+    location: "[parameters('location')]"
+    kind: "[parameters('consumptionPlanKind')]"
+    sku:
+      tier: "[parameters('consumptionPlanSkuTier')]"
+      size: "[parameters('consumptionPlanSkuSize')]"
+      name: "[parameters('consumptionPlanSkuName')]"
+      family: "[parameters('consumptionPlanSkuFamily')]"
+      capacity: "[parameters('consumptionPlanSkuCapacity')]"
+  tags:
+    author: Justin Yoo
+    profile: https://twitter.com/justinchronicle
+    projectUrl: https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps
+    repositoryUrl: https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps
+    license: https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/master/LICENSE
+resources:
+- comments: "### RESOURCE - CONSUMPTION PLAN ###"
+  type: Microsoft.Web/serverfarms
+  apiVersion: "[variables('consumptionPlan').apiVersion]"
+  kind: "[variables('consumptionPlan').kind]"
+  location: "[variables('consumptionPlan').location]"
+  name: "[variables('consumptionPlan').name]"
+  tags: "[variables('tags')]"
+  sku:
+    tier: "[variables('consumptionPlan').sku.tier]"
+    size: "[variables('consumptionPlan').sku.size]"
+    name: "[variables('consumptionPlan').sku.name]"
+    family: "[variables('consumptionPlan').sku.family]"
+    capacity: "[variables('consumptionPlan').sku.capacity]"
+  properties:
+    name: "[variables('consumptionPlan').name]"
+outputs:
+  consumptionPlanName:
+    type: string
+    value: "[variables('consumptionPlan').name]"

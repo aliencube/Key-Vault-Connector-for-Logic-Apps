@@ -1,0 +1,94 @@
+$schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
+contentVersion: 1.0.0.0
+parameters:
+  location:
+    type: string
+    metadata:
+      description: Location of the Consumption Plan.
+    defaultValue: "[resourceGroup().location]"
+  logicAppName:
+    type: string
+    metadata:
+      description: Name of the Logic App.
+  keyVaultName:
+    type: string
+    metadata:
+      description: Name of the Key Vault.
+  keyVaultSkuName:
+    type: string
+    metadata:
+      description: SKU Name of the Key Vault.
+    defaultValue: Standard
+  keyVaultSkuFamily:
+    type: string
+    metadata:
+      description: SKU family of the Key Vault.
+    defaultValue: A
+  keyVaultEnabledForDeployment:
+    type: bool
+    metadata:
+      description: Value indicating whether to enable Key Vault for deployment or not.
+    defaultValue: false
+  keyVaultEnabledForDiskEncryption:
+    type: bool
+    metadata:
+      description: Value indicating whether to enable Key Vault for disk encryption or not.
+    defaultValue: false
+  keyVaultEnabledForTemplateDeployment:
+    type: bool
+    metadata:
+      description: Value indicating whether to enable Key Vault for template deployment or not.
+    defaultValue: false
+  keyVaultAccessPoliciesForSecret:
+    type: string
+    metadata:
+      description: Comma delimited list of access policies to Key Vault secrets
+    defaultValue: List,Get
+variables:
+  logicApp:
+    name: "[parameters('logicAppName')]"
+    apiVersion: "[providers('Microsoft.Logic', 'workflows').apiVersions[0]]"
+    resourceId: "[resourceId('Microsoft.Logic/workflows', parameters('logicAppName'))]"
+  keyVault:
+    name: "[parameters('keyVaultName')]"
+    apiVersion: "[providers('Microsoft.KeyVault', 'vaults').apiVersions[0]]"
+    location: "[parameters('location')]"
+    sku:
+      name: "[parameters('keyVaultSkuName')]"
+      family: "[parameters('keyVaultSkuFamily')]"
+    enabledForDeployment: "[parameters('keyVaultEnabledForDeployment')]"
+    enabledForDiskEncryption: "[parameters('keyVaultEnabledForDiskEncryption')]"
+    enabledForTemplateDeployment: "[parameters('keyVaultEnabledForTemplateDeployment')]"
+    accessPolicies:
+      permissions:
+        secrets: "[split(parameters('keyVaultAccessPoliciesForSecret'), ',')]"
+  tags:
+    author: Justin Yoo
+    profile: https://twitter.com/justinchronicle
+    projectUrl: https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps
+    repositoryUrl: https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps
+    license: https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/master/LICENSE
+resources:
+- comments: "### RESOURCE - KEY VAULT ###"
+  type: Microsoft.KeyVault/vaults
+  apiVersion: "[variables('keyVault').apiVersion]"
+  location: "[variables('keyVault').location]"
+  name: "[variables('keyVault').name]"
+  tags: "[variables('tags')]"
+  properties:
+    sku:
+      name: "[variables('keyVault').sku.name]"
+      family: "[variables('keyVault').sku.family]"
+    tenantId: "[subscription().tenantId]"
+    enabledForDeployment: "[variables('keyVault').enabledForDeployment]"
+    enabledForDiskEncryption: "[variables('keyVault').enabledForDiskEncryption]"
+    enabledForTemplateDeployment: "[variables('keyVault').enabledForTemplateDeployment]"
+    accessPolicies:
+    - tenantId: "[reference(variables('logicApp').resourceId, variables('logicApp').apiVersion, 'Full').identity.tenantId]"
+      objectId: "[reference(variables('logicApp').resourceId, variables('logicApp').apiVersion, 'Full').identity.principalId]"
+      permissions:
+        secrets: "[variables('keyVault').accessPolicies.permissions.secrets]"
+outputs:
+  keyVaultName:
+    type: string
+    value: "[variables('keyVault').name]"

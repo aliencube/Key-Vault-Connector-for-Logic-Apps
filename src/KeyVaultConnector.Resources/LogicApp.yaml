@@ -1,0 +1,96 @@
+$schema: https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
+contentVersion: 1.0.0.0
+parameters:
+  location:
+    type: string
+    metadata:
+      description: Location of the Logic App.
+    defaultValue: "[resourceGroup().location]"
+  logicAppName:
+    type: string
+    metadata:
+      description: Name of the Logic App.
+  keyVaultApiConnectionName:
+    type: string
+    metadata:
+      description: Name of the API Connector.
+  keyVaultSecretName:
+    type: string
+    metadata:
+      description: Name of Key Vault secret.
+variables:
+  logicApp:
+    name: "[parameters('logicAppName')]"
+    apiVersion: "[providers('Microsoft.Logic', 'workflows').apiVersions[0]]"
+    location: "[parameters('location')]"
+  apiConn:
+    keyvault:
+      name: "[parameters('keyVaultApiConnectionName')]"
+      apiVersion: "[providers('Microsoft.Web', 'connections').apiVersions[0]]"
+      location: "[parameters('location')]"
+  keyVault:
+    secret:
+      name: "[parameters('keyVaultSecretName')]"
+  tags:
+    author: Justin Yoo
+    profile: https://twitter.com/justinchronicle
+    projectUrl: https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps
+    repositoryUrl: https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps
+    license: https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/master/LICENSE
+resources:
+- comments: "### RESOURCE - LOGIC APP - KEY VAULT CONNECTION SAMPLE ###"
+  type: Microsoft.Logic/workflows
+  apiVersion: "[variables('logicApp').apiVersion]"
+  location: "[variables('logicApp').location]"
+  name: "[variables('logicApp').name]"
+  tags: "[variables('tags')]"
+  identity:
+    type: SystemAssigned
+  properties:
+    parameters:
+      $connections:
+        value:
+          keyvault:
+            id: "[concat(resourceGroup().id, '/providers/Microsoft.Web/customApis/keyvault')]"
+            connectionId: "[resourceId('Microsoft.Web/connections', variables('apiConn').keyvault.name)]"
+            connectionName: "[variables('apiConn').keyvault.name]"
+    definition:
+      $schema: https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#
+      contentVersion: 1.0.0.0
+      parameters:
+        $connections:
+          type: object
+          defaultValue: {}
+        keyVault:
+          type: object
+          defaultValue: "[variables('keyVault')]"
+      triggers:
+        manual:
+          type: Request
+          kind: Http
+          inputs:
+            schema: {}
+      actions:
+        Gets_the_List_of_Secretes:
+          type: ApiConnection
+          runAfter: {}
+          inputs:
+            method: GET
+            host:
+              connection:
+                name: "@parameters('$connections')['keyvault']['connectionId']"
+            path: /secrets
+        Gets_the_Secret_Details:
+          type: ApiConnection
+          runAfter: {}
+          inputs:
+            method: GET
+            host:
+              connection:
+                name: "@parameters('$connections')['keyvault']['connectionId']"
+            path: /secrets/@{encodeURIComponent(parameters('keyVault')['secret']['name'])}
+      outputs: {}
+outputs:
+  logicAppName:
+    type: string
+    value: "[variables('logicApp').name]"

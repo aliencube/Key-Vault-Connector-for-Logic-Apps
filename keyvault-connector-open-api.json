@@ -55,7 +55,7 @@
         "x-ms-visibility": "important",
         "responses": {
           "200": {
-            "description": "successful operation",
+            "description": "OK",
             "schema": {
               "type": "array",
               "items": {
@@ -95,13 +95,13 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/Secret"
             }
           },
           "404": {
-            "description": "Secret not found"
+            "description": "Not Found"
           }
         },
         "security": [
