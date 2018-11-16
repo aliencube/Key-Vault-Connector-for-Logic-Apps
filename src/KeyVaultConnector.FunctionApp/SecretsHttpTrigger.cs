@@ -7,10 +7,12 @@ using Aliencube.AzureFunctions.Extensions.DependencyInjection.Abstractions;
 
 using KeyVaultConnector.FunctionApp.Functions;
 using KeyVaultConnector.FunctionApp.Functions.FunctionOptions;
+using KeyVaultConnector.FunctionApp.Models;
 using KeyVaultConnector.FunctionApp.Modules;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.KeyVault.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
@@ -45,10 +47,16 @@ namespace KeyVaultConnector.FunctionApp
                                       .InvokeAsync<HttpRequest, IActionResult>(req)
                                       .ConfigureAwait(false);
             }
+            catch (KeyVaultErrorException ex)
+            {
+                var statusCode = (int)ex.Response.StatusCode;
+                var value = new ErrorModel(statusCode, ex.Body?.Error?.Message);
+                result = new ObjectResult(value) { StatusCode = statusCode };
+            }
             catch (Exception ex)
             {
                 var statusCode = (int)HttpStatusCode.InternalServerError;
-                var value = new { statusCode = statusCode, message = ex.Message };
+                var value = new ErrorModel(statusCode, ex.Message);
                 result = new ObjectResult(value) { StatusCode = statusCode };
             }
 
@@ -77,10 +85,16 @@ namespace KeyVaultConnector.FunctionApp
                                       .InvokeAsync<HttpRequest, IActionResult>(req, options)
                                       .ConfigureAwait(false);
             }
+            catch (KeyVaultErrorException ex)
+            {
+                var statusCode = (int)ex.Response.StatusCode;
+                var value = new ErrorModel(statusCode, ex.Body?.Error?.Message);
+                result = new ObjectResult(value) { StatusCode = statusCode };
+            }
             catch (Exception ex)
             {
                 var statusCode = (int)HttpStatusCode.InternalServerError;
-                var value = new { statusCode = statusCode, message = ex.Message };
+                var value = new ErrorModel(statusCode, ex.Message);
                 result = new ObjectResult(value) { StatusCode = statusCode };
             }
 
