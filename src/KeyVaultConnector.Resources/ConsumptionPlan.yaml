@@ -46,7 +46,7 @@ parameters:
     - "Y"
     defaultValue: "Y"
   consumptionPlanSkuCapacity:
-    type: integer
+    type: int
     metadata:
       description: SKU capacity for the Consumption Plan.
     minValue: 0

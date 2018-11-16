@@ -45,6 +45,14 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/SecretItem"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
       security:
       - authkey: []
   /secrets/{name}:
@@ -63,6 +71,7 @@ paths:
         description: "Secret name"
         required: true
         type: "string"
+        x-ms-summary: "Name"
         x-ms-visibility: "important"
       responses:
         200:
@@ -71,6 +80,12 @@ paths:
             $ref: "#/definitions/Secret"
         404:
           description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
       security:
       - authkey: []
 securityDefinitions:
@@ -147,3 +162,14 @@ definitions:
     - name
     - enabled
     - recoveryLevel
+  Error:
+    type: "object"
+    properties:
+      statusCode:
+        type: "integer"
+      message:
+        type: "string"
+    required:
+    - statusCode
+    - message
+

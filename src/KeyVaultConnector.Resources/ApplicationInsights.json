@@ -1,0 +1,79 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location of the Application Insights."
+      },
+      "allowedValues": [
+        "East US",
+        "South Central US",
+        "West US 2",
+        "Canada Central",
+        "North Europe",
+        "West Europe",
+        "Southeast Asia",
+        "Central India"
+      ],
+      "defaultValue": "South Central US"
+    },
+    "appInsightsName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Application Insights."
+      }
+    },
+    "appInsightsKind": {
+      "type": "string",
+      "metadata": {
+        "description": "The type of Application Insights instance."
+      },
+      "allowedValues": [
+        "other",
+        "web"
+      ],
+      "defaultValue": "web"
+    }
+  },
+  "variables": {
+    "appInsights": {
+      "name": "[parameters('appInsightsName')]",
+      "apiVersion": "[providers('Microsoft.Insights', 'components').apiVersions[0]]",
+      "location": "[parameters('location')]",
+      "kind": "[parameters('appInsightsKind')]"
+    },
+    "tags": {
+      "author": "Justin Yoo",
+      "profile": "https://twitter.com/justinchronicle",
+      "projectUrl": "https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps",
+      "repositoryUrl": "https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps",
+      "license": "https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/master/LICENSE"
+    }
+  },
+  "resources": [
+    {
+      "comments": "### RESOURCE: APPLICATION INSIGHTS ###",
+      "apiVersion": "[variables('appInsights').apiVersion]",
+      "type": "Microsoft.Insights/components",
+      "kind": "[variables('appInsights').kind]",
+      "location": "[variables('appInsights').location]",
+      "tags": "[variables('tags')]",
+      "name": "[variables('appInsights').name]",
+      "properties": {
+        "applicationId": "[variables('appInsights').name]"
+      }
+    }
+  ],
+  "outputs": {
+    "applicationInsightsName": {
+      "type": "string",
+      "value": "[variables('appInsights').name]"
+    },
+    "instrumentationKey": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Insights/components', variables('appInsights').name)).instrumentationKey]"
+    }
+  }
+}

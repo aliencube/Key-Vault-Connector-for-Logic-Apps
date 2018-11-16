@@ -62,6 +62,18 @@
                 "$ref": "#/definitions/SecretItem"
               }
             }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "security": [
@@ -90,6 +102,7 @@
             "description": "Secret name",
             "required": true,
             "type": "string",
+            "x-ms-summary": "Name",
             "x-ms-visibility": "important"
           }
         ],
@@ -101,7 +114,16 @@
             }
           },
           "404": {
-            "description": "Not Found"
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
         },
         "security": [
@@ -214,6 +236,21 @@
         "name",
         "enabled",
         "recoveryLevel"
+      ]
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "statusCode",
+        "message"
       ]
     }
   }

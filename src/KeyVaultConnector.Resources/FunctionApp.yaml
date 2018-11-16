@@ -4,7 +4,7 @@ parameters:
   location:
     type: string
     metadata:
-      description: Location of the Consumption Plan.
+      description: Location of the Function App.
     defaultValue: "[resourceGroup().location]"
   storageAccountName:
     type: string
@@ -98,6 +98,8 @@ resources:
   location: "[variables('functionApp').location]"
   name: "[variables('functionApp').name]"
   tags: "[variables('tags')]"
+  identity:
+    type: SystemAssigned
   properties:
     name: "[variables('functionApp').name]"
     serverFarmId: "[variables('consumptionPlan').resourceId]"

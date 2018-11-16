@@ -69,7 +69,11 @@ resources:
           type: Request
           kind: Http
           inputs:
-            schema: {}
+            schema:
+              type: object
+              properties:
+                secretName:
+                  type: string
       actions:
         Gets_the_List_of_Secretes:
           type: ApiConnection
@@ -80,15 +84,44 @@ resources:
               connection:
                 name: "@parameters('$connections')['keyvault']['connectionId']"
             path: /secrets
+        Initialise_Secret_Name:
+          type: InitializeVariable
+          runAfter: {}
+          inputs:
+            variables:
+            - type: string
+              name: SecretName
+              value: "@parameters('keyVault')['secret']['name']"
+        Check_Secret_Name_from_Request:
+          type: If
+          runAfter:
+            Initialise_Secret_Name:
+            - Succeeded
+          expression:
+            and:
+            - equals:
+              - "@coalesce(triggerBody()?.secretName, '')"
+              - ""
+          actions: {}
+          else:
+            actions:
+              Set_Secret_Name_from_Request:
+                type: SetVariable
+                runAfter: {}
+                inputs:
+                  name: SecretName
+                  value: "@triggerBody()?.secretName"
         Gets_the_Secret_Details:
           type: ApiConnection
-          runAfter: {}
+          runAfter:
+            Check_Secret_Name_from_Request:
+            - Succeeded
           inputs:
             method: GET
             host:
               connection:
                 name: "@parameters('$connections')['keyvault']['connectionId']"
-            path: /secrets/@{encodeURIComponent(parameters('keyVault')['secret']['name'])}
+            path: /secrets/@{encodeURIComponent(variables('SecretName'))}
       outputs: {}
 outputs:
   logicAppName:

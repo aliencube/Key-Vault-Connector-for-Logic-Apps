@@ -4,12 +4,12 @@ parameters:
   location:
     type: string
     metadata:
-      description: Location of the Consumption Plan.
+      description: Location of the Key Vault.
     defaultValue: "[resourceGroup().location]"
-  logicAppName:
+  functionAppName:
     type: string
     metadata:
-      description: Name of the Logic App.
+      description: Name of the Function App.
   keyVaultName:
     type: string
     metadata:
@@ -45,10 +45,10 @@ parameters:
       description: Comma delimited list of access policies to Key Vault secrets
     defaultValue: List,Get
 variables:
-  logicApp:
-    name: "[parameters('logicAppName')]"
-    apiVersion: "[providers('Microsoft.Logic', 'workflows').apiVersions[0]]"
-    resourceId: "[resourceId('Microsoft.Logic/workflows', parameters('logicAppName'))]"
+  functionApp:
+    name: "[parameters('functionAppName')]"
+    apiVersion: "[providers('Microsoft.Web', 'sites').apiVersions[0]]"
+    resourceId: "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
   keyVault:
     name: "[parameters('keyVaultName')]"
     apiVersion: "[providers('Microsoft.KeyVault', 'vaults').apiVersions[0]]"
@@ -84,8 +84,8 @@ resources:
     enabledForDiskEncryption: "[variables('keyVault').enabledForDiskEncryption]"
     enabledForTemplateDeployment: "[variables('keyVault').enabledForTemplateDeployment]"
     accessPolicies:
-    - tenantId: "[reference(variables('logicApp').resourceId, variables('logicApp').apiVersion, 'Full').identity.tenantId]"
-      objectId: "[reference(variables('logicApp').resourceId, variables('logicApp').apiVersion, 'Full').identity.principalId]"
+    - tenantId: "[reference(variables('functionApp').resourceId, variables('functionApp').apiVersion, 'Full').identity.tenantId]"
+      objectId: "[reference(variables('functionApp').resourceId, variables('functionApp').apiVersion, 'Full').identity.principalId]"
       permissions:
         secrets: "[variables('keyVault').accessPolicies.permissions.secrets]"
 outputs:

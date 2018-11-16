@@ -4,7 +4,7 @@ parameters:
   location:
     type: string
     metadata:
-      description: Location of the Logic App.
+      description: Location of the Storage Account.
     defaultValue: "[resourceGroup().location]"
   storageAccountName:
     type: string
