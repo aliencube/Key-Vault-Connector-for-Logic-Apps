@@ -330,6 +330,6 @@ ASALocalRun/
 .mfractor/
 
 # Project specific
-**/KeyVaultConnector.Resources/*.json
+#**/KeyVaultConnector.Resources/*.json
 *.local.yaml
 *.local.json
