@@ -526,6 +526,9 @@
           "consumptionPlanName": {
             "value": "[variables('consumptionPlan').name]"
           },
+          "keyVaultName": {
+            "value": "[variables('keyVault').name]"
+          },
           "functionAppName": {
             "value": "[variables('functionApp').name]"
           },

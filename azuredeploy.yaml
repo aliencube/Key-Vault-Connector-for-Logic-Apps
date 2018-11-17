@@ -389,6 +389,8 @@ resources:
         value: "[variables('appInsights').name]"
       consumptionPlanName:
         value: "[variables('consumptionPlan').name]"
+      keyVaultName:
+        value: "[variables('keyVault').name]"
       functionAppName:
         value: "[variables('functionApp').name]"
       functionAppKind:

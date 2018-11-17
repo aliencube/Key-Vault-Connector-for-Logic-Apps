@@ -18,6 +18,10 @@ parameters:
     type: string
     metadata:
       description: Name of the Consumption Plan.
+  keyVaultName:
+    type: string
+    metadata:
+      description: Name of the Key Vault.
   functionAppName:
     type: string
     metadata:
@@ -74,6 +78,8 @@ variables:
   consumptionPlan:
     name: "[parameters('consumptionPlanName')]"
     resourceId: "[resourceId('Microsoft.Web/serverfarms', parameters('consumptionPlanName'))]"
+  keyVault:
+    name: "[parameters('keyVaultName')]"
   functionApp:
     name: "[parameters('functionAppName')]"
     apiVersion: "[providers('Microsoft.Web', 'sites').apiVersions[0]]"
@@ -120,6 +126,8 @@ resources:
       FUNCTIONS_WORKER_RUNTIME: "[variables('functionApp').settings.workerRuntime]"
       WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccount').name, ';AccountKey=', listKeys(variables('storageAccount').resourceId, variables('storageAccount').apiVersion).keys[0].value, ';EndpointSuffix=core.windows.net')]"
       WEBSITE_CONTENTSHARE: "[toLower(variables('functionApp').name)]"
+
+      KeyVault__Name: "[variables('keyVault').name]"
 outputs:
   hostname:
     type: string

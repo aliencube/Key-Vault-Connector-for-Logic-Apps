@@ -11,6 +11,9 @@
     "consumptionPlanName": {
       "value": "[CONSUMPTION_PLAN_NAME]"
     },
+    "keyVaultName": {
+      "value": "[KEY_VAULT_NAME]"
+    },
     "functionAppName": {
       "value": "[FUNCTION_APP_NAME]"
     },
