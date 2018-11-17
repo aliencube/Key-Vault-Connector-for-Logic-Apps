@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2046
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C8234F81-78D8-4ED4-94D8-B6CD603BA2BA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{5EB2241A-6348-4680-BB26-9AFF6086803F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyVaultConnector.FunctionApp", "src\KeyVaultConnector.FunctionApp\KeyVaultConnector.FunctionApp.csproj", "{5E426F32-0819-4D23-98BA-BD4FF28D542C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyVaultConnector.FunctionApp.Tests", "test\KeyVaultConnector.FunctionApp.Tests\KeyVaultConnector.FunctionApp.Tests.csproj", "{AFA119A0-8684-402A-A97A-36B181261606}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E426F32-0819-4D23-98BA-BD4FF28D542C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E426F32-0819-4D23-98BA-BD4FF28D542C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E426F32-0819-4D23-98BA-BD4FF28D542C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E426F32-0819-4D23-98BA-BD4FF28D542C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFA119A0-8684-402A-A97A-36B181261606}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFA119A0-8684-402A-A97A-36B181261606}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFA119A0-8684-402A-A97A-36B181261606}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFA119A0-8684-402A-A97A-36B181261606}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5E426F32-0819-4D23-98BA-BD4FF28D542C} = {C8234F81-78D8-4ED4-94D8-B6CD603BA2BA}
+		{AFA119A0-8684-402A-A97A-36B181261606} = {5EB2241A-6348-4680-BB26-9AFF6086803F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {20DC88B7-0A36-4B52-A4CB-3EAF6059EDE5}
+	EndGlobalSection
+EndGlobal

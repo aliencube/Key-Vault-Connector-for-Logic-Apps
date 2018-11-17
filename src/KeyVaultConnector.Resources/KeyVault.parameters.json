@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "keyVaultName": {
+      "value": "[KEY_VAULT_NAME]"
+    },
+    "functionAppName": {
+      "value": "[FUNCTION_APP_NAME]"
+    },
+    "keyVaultSkuName": {
+      "value": "Standard"
+    },
+    "keyVaultSkuFamily": {
+      "value": "A"
+    },
+    "keyVaultEnabledForDeployment": {
+      "value": false
+    },
+    "keyVaultEnabledForDiskEncryption": {
+      "value": false
+    },
+    "keyVaultEnabledForTemplateDeployment": {
+      "value": false
+    },
+    "keyVaultAccessPoliciesForSecret": {
+      "value": false
+    }
+  }
+}

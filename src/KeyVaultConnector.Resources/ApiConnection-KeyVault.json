@@ -1,0 +1,74 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location of the API Connector."
+      },
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "customApiName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Custom API."
+      }
+    },
+    "apiConnName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the API Connector."
+      }
+    },
+    "apiConnAuthKey": {
+      "type": "securestring",
+      "metadata": {
+        "description": "The API Key for the API Connector."
+      }
+    }
+  },
+  "variables": {
+    "customApi": {
+      "name": "[parameters('customApiName')]"
+    },
+    "apiConn": {
+      "name": "[parameters('apiConnName')]",
+      "apiVersion": "[providers('Microsoft.Web', 'connections').apiVersions[0]]",
+      "location": "[parameters('location')]",
+      "authKey": "[parameters('apiConnAuthKey')]"
+    },
+    "tags": {
+      "author": "Justin Yoo",
+      "profile": "https://twitter.com/justinchronicle",
+      "projectUrl": "https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps",
+      "repositoryUrl": "https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps",
+      "license": "https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/master/LICENSE"
+    }
+  },
+  "resources": [
+    {
+      "comments": "### RESOURCE - API CONNECTION - KEY VAULT ###",
+      "type": "Microsoft.Web/connections",
+      "apiVersion": "[variables('apiConn').apiVersion]",
+      "location": "[variables('apiConn').location]",
+      "name": "[variables('apiConn').name]",
+      "tags": "[variables('tags')]",
+      "properties": {
+        "api": {
+          "id": "[concat(resourceGroup().id, '/providers/Microsoft.Web/customApis/', variables('customApi').name)]"
+        },
+        "displayName": "[variables('apiConn').name]",
+        "parameterValues": {
+          "api_key": "[variables('apiConn').authKey]"
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "apiConnectionName": {
+      "type": "string",
+      "value": "[variables('apiConn').name]"
+    }
+  }
+}

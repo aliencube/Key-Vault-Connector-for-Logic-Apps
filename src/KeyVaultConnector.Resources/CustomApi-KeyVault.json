@@ -1,0 +1,111 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location of the Custom API Connector."
+      },
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "customApiName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the custom API."
+      }
+    },
+    "customApiDisplayName": {
+      "type": "string",
+      "metadata": {
+        "description": "Display name of the custom API."
+      },
+      "defaultValue": "Key Vault"
+    },
+    "customApiDescription": {
+      "type": "string",
+      "metadata": {
+        "description": "Description of the custom API."
+      },
+      "defaultValue": "Key Vault Custom API for Logic App"
+    },
+    "customApiIconUri": {
+      "type": "string",
+      "metadata": {
+        "description": "The custom API icon in the embedded base64 format."
+      },
+      "defaultValue": "https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/dev/icons/keyvault-custom-api.png"
+    },
+    "customApiFunctionAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "The Name of the custom API function app"
+      }
+    },
+    "customApiSwaggerDefinition": {
+      "type": "object",
+      "metadata": {
+        "description": "Swagger (Open API 2.0) definition of the custom API"
+      }
+    }
+  },
+  "variables": {
+    "customApi": {
+      "name": "[parameters('customApiName')]",
+      "apiVersion": "[providers('Microsoft.Web', 'customApis').apiVersions[0]]",
+      "location": "[parameters('location')]",
+      "displayName": "[parameters('customApiDisplayName')]",
+      "description": "[parameters('customApiDescription')]",
+      "iconUri": "[parameters('customApiIconUri')]",
+      "serviceUrl": "[concat('https://', parameters('customApiFunctionAppName'), '.azurewebsites.net/api')]",
+      "swagger": "[parameters('customApiSwaggerDefinition')]"
+    },
+    "tags": {
+      "author": "Justin Yoo",
+      "profile": "https://twitter.com/justinchronicle",
+      "projectUrl": "https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps",
+      "repositoryUrl": "https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps",
+      "license": "https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/master/LICENSE"
+    }
+  },
+  "resources": [
+    {
+      "comments": "### RESOURCE - CUSTOM API - KEY VAULT ###",
+      "type": "Microsoft.Web/customApis",
+      "apiVersion": "[variables('customApi').apiVersion]",
+      "location": "[variables('customApi').location]",
+      "name": "[variables('customApi').name]",
+      "tags": "[variables('tags')]",
+      "properties": {
+        "displayName": "[variables('customApi').displayName]",
+        "description": "[variables('customApi').description]",
+        "iconUri": "[variables('customApi').iconUri]",
+        "backendService": {
+          "serviceUrl": "[variables('customApi').serviceUrl]"
+        },
+        "connectionParameters": {
+          "api_key": {
+            "type": "securestring",
+            "uiDefinition": {
+              "displayName": "API Key",
+              "description": "The API key for this API",
+              "tooltip": "Provide your API key - this is usually the default host key of your Azure Function app",
+              "constraints": {
+                "tabIndex": 2,
+                "clearText": false,
+                "required": true
+              }
+            }
+          }
+        },
+        "swagger": "[variables('customApi').swagger]"
+      }
+    }
+  ],
+  "outputs": {
+    "customApiName": {
+      "type": "string",
+      "value": "[variables('customApi').name]"
+    }
+  }
+}

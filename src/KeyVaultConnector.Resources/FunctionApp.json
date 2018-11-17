@@ -1,0 +1,183 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location of the Function App."
+      },
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of Storage Account"
+      }
+    },
+    "appInsightsName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Application Insights."
+      }
+    },
+    "consumptionPlanName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Consumption Plan."
+      }
+    },
+    "keyVaultName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Key Vault."
+      }
+    },
+    "functionAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Function App."
+      }
+    },
+    "functionAppKind": {
+      "type": "string",
+      "metadata": {
+        "description": "Kind of the Function App."
+      },
+      "allowedValues": [
+        "functionapp"
+      ],
+      "defaultValue": "functionapp"
+    },
+    "functionAppSecretStorageType": {
+      "type": "string",
+      "metadata": {
+        "description": "Secret storage type of the Function App."
+      },
+      "allowedValues": [
+        "Blob",
+        "Files"
+      ],
+      "defaultValue": "Blob"
+    },
+    "functionAppExtensionVersion": {
+      "type": "string",
+      "metadata": {
+        "description": "Extension version of the Function App."
+      },
+      "allowedValues": [
+        "~1",
+        "~2"
+      ],
+      "defaultValue": "~2"
+    },
+    "functionAppEditMode": {
+      "type": "string",
+      "metadata": {
+        "description": "Edit mode of the Function App."
+      },
+      "allowedValues": [
+        "readonly",
+        "readwrite"
+      ],
+      "defaultValue": "readonly"
+    },
+    "functionAppWorkerRuntime": {
+      "type": "string",
+      "metadata": {
+        "description": "Worker runtime of the Function App."
+      },
+      "allowedValues": [
+        "dotnet",
+        "node",
+        "java"
+      ],
+      "defaultValue": "dotnet"
+    }
+  },
+  "variables": {
+    "storageAccount": {
+      "name": "[parameters('storageAccountName')]",
+      "apiVersion": "[providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]]",
+      "resourceId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+    },
+    "appInsights": {
+      "name": "[parameters('appInsightsName')]",
+      "apiVersion": "[providers('Microsoft.Insights', 'components').apiVersions[0]]",
+      "resourceId": "[resourceId('Microsoft.Insights/components', parameters('appInsightsName'))]"
+    },
+    "consumptionPlan": {
+      "name": "[parameters('consumptionPlanName')]",
+      "resourceId": "[resourceId('Microsoft.Web/serverfarms', parameters('consumptionPlanName'))]"
+    },
+    "keyVault": {
+      "name": "[parameters('keyVaultName')]"
+    },
+    "functionApp": {
+      "name": "[parameters('functionAppName')]",
+      "apiVersion": "[providers('Microsoft.Web', 'sites').apiVersions[0]]",
+      "location": "[parameters('location')]",
+      "kind": "[parameters('functionAppKind')]",
+      "settings": {
+        "secretStorageType": "[parameters('functionAppSecretStorageType')]",
+        "extensionVersion": "[parameters('functionAppExtensionVersion')]",
+        "editMode": "[parameters('functionAppEditMode')]",
+        "workerRuntime": "[parameters('functionAppWorkerRuntime')]"
+      }
+    },
+    "tags": {
+      "author": "Justin Yoo",
+      "profile": "https://twitter.com/justinchronicle",
+      "projectUrl": "https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps",
+      "repositoryUrl": "https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps",
+      "license": "https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/master/LICENSE"
+    }
+  },
+  "resources": [
+    {
+      "comments": "### RESOURCE - FUNCTION APP ###",
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "[variables('functionApp').apiVersion]",
+      "kind": "[variables('functionApp').kind]",
+      "location": "[variables('functionApp').location]",
+      "name": "[variables('functionApp').name]",
+      "tags": "[variables('tags')]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "name": "[variables('functionApp').name]",
+        "serverFarmId": "[variables('consumptionPlan').resourceId]"
+      },
+      "resources": [
+        {
+          "comments": "### RESOURCE - FUNCTION APP - APP SETTINGS ###",
+          "type": "config",
+          "apiVersion": "[variables('functionApp').apiVersion]",
+          "name": "appsettings",
+          "dependsOn": [
+            "[variables('functionApp').name]"
+          ],
+          "properties": {
+            "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccount').name, ';AccountKey=', listKeys(variables('storageAccount').resourceId, variables('storageAccount').apiVersion).keys[0].value, ';EndpointSuffix=core.windows.net')]",
+            "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccount').name, ';AccountKey=', listKeys(variables('storageAccount').resourceId, variables('storageAccount').apiVersion).keys[0].value, ';EndpointSuffix=core.windows.net')]",
+            "AzureWebJobsSecretStorageType": "[variables('functionApp').settings.secretStorageType]",
+            "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(variables('appInsights').resourceId, variables('appInsights').apiVersion, 'Full').properties.instrumentationKey]",
+            "FUNCTIONS_EXTENSION_VERSION": "[variables('functionApp').settings.extensionVersion]",
+            "FUNCTION_APP_EDIT_MODE": "[variables('functionApp').settings.editMode]",
+            "FUNCTIONS_WORKER_RUNTIME": "[variables('functionApp').settings.workerRuntime]",
+            "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccount').name, ';AccountKey=', listKeys(variables('storageAccount').resourceId, variables('storageAccount').apiVersion).keys[0].value, ';EndpointSuffix=core.windows.net')]",
+            "WEBSITE_CONTENTSHARE": "[toLower(variables('functionApp').name)]",
+            "KeyVault__Name": "[variables('keyVault').name]"
+          }
+        }
+      ]
+    }
+  ],
+  "outputs": {
+    "hostname": {
+      "type": "string",
+      "value": "[concat('https://', reference(variables('functionApp').name).hostNames[0])]"
+    }
+  }
+}

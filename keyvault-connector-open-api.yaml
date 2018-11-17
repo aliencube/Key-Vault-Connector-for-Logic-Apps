@@ -1,0 +1,175 @@
+swagger: "2.0"
+info:
+  description: "This is a custom Key Vault connector for Logic App."
+  version: "1.0.0"
+  title: "Key Vault Connector"
+  termsOfService: "https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/master/LICENSE"
+  contact:
+    url: "https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps/issues"
+  license:
+    name: "MIT"
+    url: "https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/master/LICENSE"
+externalDocs:
+  description: "Find out more about Key Vault Custom Connector"
+  url: "https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps"
+host: "keyvaultconnector.azurewebsites.net"
+basePath: "/api"
+tags:
+- name: "secrets"
+  description: "Access to the list of secrets"
+  externalDocs:
+    description: "Find out more"
+    url: "https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps"
+- name: "secret"
+  description: "Access to the secret"
+  externalDocs:
+    description: "Find out more"
+    url: "https://github.com/aliencube/Key-Vault-Connector-for-Logic-Apps"
+schemes:
+- "https"
+paths:
+  /secrets:
+    get:
+      tags:
+      - "secrets"
+      summary: "Gets the list of secretes"
+      description: "This returns the list of secrets without their values"
+      operationId: "Secrets"
+      produces:
+      - "application/json"
+      x-ms-visibility: "important"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/SecretItem"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - authkey: []
+  /secrets/{name}:
+    get:
+      tags:
+      - "secret"
+      summary: "Gets the secret details"
+      description: "This returns a secreet details including its value"
+      operationId: "Secret"
+      produces:
+      - "application/json"
+      x-ms-visibility: "important"
+      parameters:
+      - name: "name"
+        in: "path"
+        description: "Secret name"
+        required: true
+        type: "string"
+        x-ms-summary: "Name"
+        x-ms-visibility: "important"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Secret"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
+      security:
+      - authkey: []
+securityDefinitions:
+  authkey:
+    type: "apiKey"
+    name: "x-functions-key"
+    in: "header"
+definitions:
+  SecretItem:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      enabled:
+        type: "boolean"
+      managed:
+        type: "boolean"
+      contentType:
+        type: "string"
+      recoveryLevel:
+        type: "string"
+      created:
+        type: "string"
+        format: "date-time"
+      updated:
+        type: "string"
+        format: "date-time"
+      expires:
+        type: "string"
+        format: "date-time"
+      notBefore:
+        type: "string"
+        format: "date-time"
+    required:
+    - id
+    - name
+    - enabled
+    - recoveryLevel
+  Secret:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      value:
+        type: "string"
+      enabled:
+        type: "boolean"
+      managed:
+        type: "boolean"
+      version:
+        type: "string"
+      contentType:
+        type: "string"
+      recoveryLevel:
+        type: "string"
+      created:
+        type: "string"
+        format: "date-time"
+      updated:
+        type: "string"
+        format: "date-time"
+      expires:
+        type: "string"
+        format: "date-time"
+      notBefore:
+        type: "string"
+        format: "date-time"
+    required:
+    - id
+    - name
+    - enabled
+    - recoveryLevel
+  Error:
+    type: "object"
+    properties:
+      statusCode:
+        type: "integer"
+      message:
+        type: "string"
+    required:
+    - statusCode
+    - message
+

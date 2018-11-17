@@ -1,0 +1,36 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountName": {
+      "value": "[STORAGE_ACCOUNT_NAME]"
+    },
+    "appInsightsName": {
+      "value": "[APPLICATION_INSIGHTS_NAME]"
+    },
+    "consumptionPlanName": {
+      "value": "[CONSUMPTION_PLAN_NAME]"
+    },
+    "keyVaultName": {
+      "value": "[KEY_VAULT_NAME]"
+    },
+    "functionAppName": {
+      "value": "[FUNCTION_APP_NAME]"
+    },
+    "functionAppKind": {
+      "value": "functionapp"
+    },
+    "functionAppSecretStorageType": {
+      "value": "Blob"
+    },
+    "functionAppExtensionVersion": {
+      "value": "~2"
+    },
+    "functionAppEditMode": {
+      "value": "readonly"
+    },
+    "functionAppWorkerRuntime": {
+      "value": "dotnet"
+    }
+  }
+}
