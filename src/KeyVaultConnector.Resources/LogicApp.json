@@ -25,7 +25,8 @@
       "type": "string",
       "metadata": {
         "description": "Name of Key Vault secret."
-      }
+      },
+      "defaultValue": ""
     }
   },
   "variables": {

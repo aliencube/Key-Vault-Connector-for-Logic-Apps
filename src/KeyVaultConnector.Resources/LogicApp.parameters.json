@@ -9,7 +9,7 @@
       "value": "[KEY_VAULT_API_CONNECTION_NAME]"
     },
     "keyVaultSecretName": {
-      "value": "[KEY_VAULT_SECRET_NAME]"
+      "value": ""
     }
   }
 }
