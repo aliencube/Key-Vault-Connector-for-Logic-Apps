@@ -236,7 +236,7 @@ variables:
   linked:
     apiVersion: "[providers('Microsoft.Resources', 'deployments').apiVersions[0]]"
     templateLink:
-      uri: "[replace('https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/{0}/{1}.json', '{0}', parameters('linkedTemplatesBranch'))"
+      uri: "[replace('https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/{0}/src/KeyVaultConnector.Resources/{1}.json', '{0}', parameters('linkedTemplatesBranch'))]"
   storageAccount:
     name: "[parameters('storageAccountName')]"
     location: "[parameters('location')]"
@@ -467,7 +467,7 @@ resources:
   type: Microsoft.Resources/deployments
   name: "[variables('deployments').keyVault]"
   dependsOn:
-  - "[variables('deployments').keyVault]"
+  - "[variables('deployments').logicApp]"
   properties:
     mode: Incremental
     templateLink:

@@ -75,7 +75,7 @@ resources:
                 secretName:
                   type: string
       actions:
-        Gets_the_List_of_Secretes:
+        Get_the_List_of_Secrets:
           type: ApiConnection
           runAfter: {}
           inputs:
@@ -111,7 +111,7 @@ resources:
                 inputs:
                   name: SecretName
                   value: "@triggerBody()?.secretName"
-        Gets_the_Secret_Details:
+        Get_the_Secret_Details:
           type: ApiConnection
           runAfter:
             Check_Secret_Name_from_Request:
@@ -122,6 +122,21 @@ resources:
               connection:
                 name: "@parameters('$connections')['keyvault']['connectionId']"
             path: /secrets/@{encodeURIComponent(variables('SecretName'))}
+        Response:
+          type: Response
+          runAfter:
+            Get_the_List_of_Secrets:
+            - Succeeded
+            - Failed
+            Get_the_Secret_Details:
+            - Succeeded
+            - Failed
+          inputs:
+            statusCode: 200
+            body:
+              secretName: "@variables('SecretName')"
+              secrets: "@body('Get_the_List_of_Secrets')"
+              secret: "@body('Get_the_Secret_Details')"
       outputs: {}
 outputs:
   logicAppName:
