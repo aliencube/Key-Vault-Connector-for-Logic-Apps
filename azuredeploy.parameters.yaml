@@ -51,8 +51,6 @@ parameters:
     value: Key Vault Custom API for Logic App
   customApiIconUri:
     value: "https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/dev/icons/keyvault-custom-api.png"
-  customApiFunctionAppName:
-    value: "[FUNCTION_APP_NAME]"
   customApiSwaggerDefinition:
     value:
       swagger: "2.0"

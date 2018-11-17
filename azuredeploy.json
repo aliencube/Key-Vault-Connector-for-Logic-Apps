@@ -223,12 +223,6 @@
       },
       "defaultValue": "https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/dev/icons/keyvault-custom-api.png"
     },
-    "customApiFunctionAppName": {
-      "type": "string",
-      "metadata": {
-        "description": "The Name of the custom API function app"
-      }
-    },
     "customApiSwaggerDefinition": {
       "type": "object",
       "metadata": {
