@@ -10,17 +10,16 @@ parameters:
     type: string
     metadata:
       description: Name of the custom API.
-    defaultValue: KeyVault
   customApiDisplayName:
     type: string
     metadata:
       description: Display name of the custom API.
-    defaultValue: KeyVault
+    defaultValue: Key Vault
   customApiDescription:
     type: string
     metadata:
       description: Description of the custom API.
-    defaultValue: This is a custom API to Azure Key Vault for Logic App
+    defaultValue: Key Vault Custom API for Logic App
   customApiIconUri:
     type: string
     metadata:

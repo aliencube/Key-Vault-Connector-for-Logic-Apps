@@ -6,7 +6,7 @@
       "value": "[APPLICATION_INSIGHTS_NAME]"
     },
     "appInsightsKind": {
-      "value": "[APPLICATION_INSIGHTS_KIND]"
+      "value": "web"
     }
   }
 }

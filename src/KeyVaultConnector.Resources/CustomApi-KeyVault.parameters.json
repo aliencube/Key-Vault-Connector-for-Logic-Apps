@@ -6,10 +6,10 @@
       "value": "[CUSTOM_API_NAME]"
     },
     "customApiDisplayName": {
-      "value": "[CUSTOM_API_DISPLAY_NAME]"
+      "value": "Key Vault"
     },
     "customApiDescription": {
-      "value": "[CUSTOM_API_DESCRIPTION]"
+      "value": "Key Vault Custom API for Logic App"
     },
     "customApiIconUri": {
       "value": "https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/dev/icons/keyvault-custom-api.png"

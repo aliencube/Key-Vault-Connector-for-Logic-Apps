@@ -4,6 +4,24 @@
   "parameters": {
     "consumptionPlanName": {
       "value": "[CONSUMPTION_PLAN_NAME]"
+    },
+    "consumptionPlanKind": {
+      "value": "functionapp"
+    },
+    "consumptionPlanSkuTier": {
+      "value": "Dynamic"
+    },
+    "consumptionPlanSkuSize": {
+      "value": "Y1"
+    },
+    "consumptionPlanSkuName": {
+      "value": "Y1"
+    },
+    "consumptionPlanSkuFamily": {
+      "value": "Y"
+    },
+    "consumptionPlanSkuCapacity": {
+      "value": 0
     }
   }
 }

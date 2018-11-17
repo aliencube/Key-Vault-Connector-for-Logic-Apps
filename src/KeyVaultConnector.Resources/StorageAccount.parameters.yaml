@@ -3,3 +3,7 @@ contentVersion: 1.0.0.0
 parameters:
   storageAccountName:
     value: '[STORAGE_ACCOUNT_NAME]'
+  storageAccountSkuName:
+    value: "Standard_LRS"
+  storageAccountSkuTier:
+    value: "Standard"

@@ -9,3 +9,13 @@ parameters:
     value: "[CONSUMPTION_PLAN_NAME]"
   functionAppName:
     value: "[FUNCTION_APP_NAME]"
+  functionAppKind:
+    value: "functionapp"
+  functionAppSecretStorageType:
+    value: "Blob"
+  functionAppExtensionVersion:
+    value: "~2"
+  functionAppEditMode:
+    value: "readonly"
+  functionAppWorkerRuntime:
+    value: "dotnet"
