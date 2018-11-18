@@ -22,6 +22,11 @@ parameters:
     type: string
     metadata:
       description: Name of the Key Vault.
+  swaggerDefinitionImportUrl:
+    type: string
+    metadata:
+      description: URL to import Swagger definition.
+    defaultValue: "https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/master/swagger.yaml"
   functionAppName:
     type: string
     metadata:
@@ -80,6 +85,8 @@ variables:
     resourceId: "[resourceId('Microsoft.Web/serverfarms', parameters('consumptionPlanName'))]"
   keyVault:
     name: "[parameters('keyVaultName')]"
+  swagger:
+    importUrl: "[parameters('swaggerDefinitionImportUrl')]"
   functionApp:
     name: "[parameters('functionAppName')]"
     apiVersion: "[providers('Microsoft.Web', 'sites').apiVersions[0]]"
@@ -128,6 +135,7 @@ resources:
       WEBSITE_CONTENTSHARE: "[toLower(variables('functionApp').name)]"
 
       KeyVault__Name: "[variables('keyVault').name]"
+      Swagger__ImportUrl: "[variables('swagger').importUrl]"
 outputs:
   hostname:
     type: string

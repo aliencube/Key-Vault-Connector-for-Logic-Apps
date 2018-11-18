@@ -14,6 +14,9 @@
     "keyVaultName": {
       "value": "[KEY_VAULT_NAME]"
     },
+    "swaggerDefinitionImportUrl": {
+      "value": "https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/master/swagger.yaml"
+    },
     "functionAppName": {
       "value": "[FUNCTION_APP_NAME]"
     },

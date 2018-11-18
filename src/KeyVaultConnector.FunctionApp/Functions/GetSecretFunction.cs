@@ -44,7 +44,8 @@ namespace KeyVaultConnector.FunctionApp.Functions
 
             var opt = options as GetSecretFunctionOptions ?? throw new ArgumentNullException(nameof(options));
 
-            var secret = await this._kv.GetSecretAsync(this._settings.KeyVault.BaseUri, opt.SecretName).ConfigureAwait(false);
+            var secret = await this._kv.GetSecretAsync(this._settings.KeyVault.BaseUri, opt.SecretName)
+                                   .ConfigureAwait(false);
             var mapped = this._mapper.Map<SecretModel>(secret);
 
             return (TOutput)(IActionResult)new OkObjectResult(mapped);

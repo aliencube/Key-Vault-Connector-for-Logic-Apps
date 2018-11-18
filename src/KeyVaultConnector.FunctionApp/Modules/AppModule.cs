@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Net.Http;
+using System.Reflection;
 
 using AutoMapper;
 
@@ -25,10 +26,12 @@ namespace KeyVaultConnector.FunctionApp.Modules
             var kv = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
 
             services.AddSingleton<IKeyVaultClient>(kv);
-            services.AddSingleton<AppSettings>(new AppSettings());
+            services.AddSingleton<HttpClient>();
+            services.AddSingleton<AppSettings>();
 
             services.AddTransient<IGetSecretsFunction, GetSecretsFunction>();
             services.AddTransient<IGetSecretFunction, GetSecretFunction>();
+            services.AddTransient<IRenderSwaggerFunction, RenderSwaggerFunction>();
 
             services.AddAutoMapper(Assembly.GetAssembly(this.GetType()));
         }

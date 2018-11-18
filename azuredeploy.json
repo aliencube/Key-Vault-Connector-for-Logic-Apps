@@ -195,6 +195,13 @@
       ],
       "defaultValue": "dotnet"
     },
+    "functionAppSwaggerDefinitionImportUrl": {
+      "type": "string",
+      "metadata": {
+        "description": "URL to import Swagger definition."
+      },
+      "defaultValue": "https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/master/swagger.yaml"
+    },
     "customApiName": {
       "type": "string",
       "metadata": {
@@ -354,6 +361,9 @@
         "extensionVersion": "[parameters('functionAppExtensionVersion')]",
         "editMode": "[parameters('functionAppEditMode')]",
         "workerRuntime": "[parameters('functionAppWorkerRuntime')]"
+      },
+      "swagger": {
+        "importUrl": "[parameters('functionAppSwaggerDefinitionImportUrl')]"
       }
     },
     "customApi": {
@@ -522,6 +532,9 @@
           },
           "keyVaultName": {
             "value": "[variables('keyVault').name]"
+          },
+          "swaggerDefinitionImportUrl": {
+            "value": "[variables('functionApp').swagger.importUrl]"
           },
           "functionAppName": {
             "value": "[variables('functionApp').name]"

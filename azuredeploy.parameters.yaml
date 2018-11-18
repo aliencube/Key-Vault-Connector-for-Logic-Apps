@@ -42,6 +42,8 @@ parameters:
     value: "readonly"
   functionAppWorkerRuntime:
     value: "dotnet"
+  functionAppSwaggerDefinitionImportUrl:
+    value: "https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/master/swagger.yaml"
 
   customApiName:
     value: "[CUSTOM_API_NAME]"
