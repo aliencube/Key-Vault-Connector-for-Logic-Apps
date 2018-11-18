@@ -145,6 +145,11 @@ parameters:
     - node
     - java
     defaultValue: dotnet
+  functionAppSwaggerDefinitionImportUrl:
+    type: string
+    metadata:
+      description: URL to import Swagger definition.
+    defaultValue: "https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/master/swagger.yaml"
 
   customApiName:
     type: string
@@ -266,6 +271,8 @@ variables:
       extensionVersion: "[parameters('functionAppExtensionVersion')]"
       editMode: "[parameters('functionAppEditMode')]"
       workerRuntime: "[parameters('functionAppWorkerRuntime')]"
+    swagger:
+      importUrl: "[parameters('functionAppSwaggerDefinitionImportUrl')]"
   customApi:
     name: "[parameters('customApiName')]"
     location: "[parameters('location')]"
@@ -387,6 +394,8 @@ resources:
         value: "[variables('consumptionPlan').name]"
       keyVaultName:
         value: "[variables('keyVault').name]"
+      swaggerDefinitionImportUrl:
+        value: "[variables('functionApp').swagger.importUrl]"
       functionAppName:
         value: "[variables('functionApp').name]"
       functionAppKind:

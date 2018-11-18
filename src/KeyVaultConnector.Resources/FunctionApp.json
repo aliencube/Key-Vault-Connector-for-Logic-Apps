@@ -33,6 +33,13 @@
         "description": "Name of the Key Vault."
       }
     },
+    "swaggerDefinitionImportUrl": {
+      "type": "string",
+      "metadata": {
+        "description": "URL to import Swagger definition."
+      },
+      "defaultValue": "https://raw.githubusercontent.com/aliencube/Key-Vault-Connector-for-Logic-Apps/master/swagger.yaml"
+    },
     "functionAppName": {
       "type": "string",
       "metadata": {
@@ -113,6 +120,9 @@
     "keyVault": {
       "name": "[parameters('keyVaultName')]"
     },
+    "swagger": {
+      "importUrl": "[parameters('swaggerDefinitionImportUrl')]"
+    },
     "functionApp": {
       "name": "[parameters('functionAppName')]",
       "apiVersion": "[providers('Microsoft.Web', 'sites').apiVersions[0]]",
@@ -168,7 +178,8 @@
             "FUNCTIONS_WORKER_RUNTIME": "[variables('functionApp').settings.workerRuntime]",
             "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccount').name, ';AccountKey=', listKeys(variables('storageAccount').resourceId, variables('storageAccount').apiVersion).keys[0].value, ';EndpointSuffix=core.windows.net')]",
             "WEBSITE_CONTENTSHARE": "[toLower(variables('functionApp').name)]",
-            "KeyVault__Name": "[variables('keyVault').name]"
+            "KeyVault__Name": "[variables('keyVault').name]",
+            "Swagger__ImportUrl": "[variables('swagger').importUrl]"
           }
         }
       ]
