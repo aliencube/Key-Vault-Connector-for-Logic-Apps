@@ -44,7 +44,8 @@ namespace KeyVaultConnector.FunctionApp.Functions
         {
             this.Log.LogInformation("C# HTTP trigger function processed a request.");
 
-            var secrets = await this._kv.GetSecretsAsync(this._settings.KeyVault.BaseUri).ConfigureAwait(false);
+            var secrets = await this._kv.GetSecretsAsync(this._settings.KeyVault.BaseUri)
+                                        .ConfigureAwait(false);
             var items = secrets.OfType<SecretItem>().ToList();
             var mapped = this._mapper.Map<List<SecretItemModel>>(items);
 
