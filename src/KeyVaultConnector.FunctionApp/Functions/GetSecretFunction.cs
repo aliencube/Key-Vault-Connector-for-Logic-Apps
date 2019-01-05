@@ -6,8 +6,8 @@ using Aliencube.AzureFunctions.Extensions.DependencyInjection.Abstractions;
 using AutoMapper;
 
 using KeyVaultConnector.FunctionApp.Configurations;
+using KeyVaultConnector.FunctionApp.Extensions;
 using KeyVaultConnector.FunctionApp.Functions.FunctionOptions;
-using KeyVaultConnector.FunctionApp.Models;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.KeyVault;
@@ -44,11 +44,12 @@ namespace KeyVaultConnector.FunctionApp.Functions
 
             var opt = options as GetSecretFunctionOptions ?? throw new ArgumentNullException(nameof(options));
 
-            var secret = await this._kv.GetSecretAsync(this._settings.KeyVault.BaseUri, opt.SecretName)
+            var secret = await this._kv
+                                   .GetSecretAsync(this._settings.KeyVault.BaseUri, opt.SecretName)
+                                   .MapAsync(this._mapper)
                                    .ConfigureAwait(false);
-            var mapped = this._mapper.Map<SecretModel>(secret);
 
-            return (TOutput)(IActionResult)new OkObjectResult(mapped);
+            return (TOutput)(IActionResult)new OkObjectResult(secret);
         }
     }
 }
