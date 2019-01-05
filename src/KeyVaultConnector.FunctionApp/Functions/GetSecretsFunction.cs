@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Aliencube.AzureFunctions.Extensions.DependencyInjection.Abstractions;
@@ -8,11 +6,10 @@ using Aliencube.AzureFunctions.Extensions.DependencyInjection.Abstractions;
 using AutoMapper;
 
 using KeyVaultConnector.FunctionApp.Configurations;
-using KeyVaultConnector.FunctionApp.Models;
+using KeyVaultConnector.FunctionApp.Extensions;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.KeyVault;
-using Microsoft.Azure.KeyVault.Models;
 using Microsoft.Extensions.Logging;
 
 namespace KeyVaultConnector.FunctionApp.Functions
@@ -44,12 +41,12 @@ namespace KeyVaultConnector.FunctionApp.Functions
         {
             this.Log.LogInformation("C# HTTP trigger function processed a request.");
 
-            var secrets = await this._kv.GetSecretsAsync(this._settings.KeyVault.BaseUri)
-                                        .ConfigureAwait(false);
-            var items = secrets.OfType<SecretItem>().ToList();
-            var mapped = this._mapper.Map<List<SecretItemModel>>(items);
+            var secrets = await this._kv
+                                    .GetSecretsAsync(this._settings.KeyVault.BaseUri)
+                                    .MapAsync(this._mapper)
+                                    .ConfigureAwait(false);
 
-            return (TOutput)(IActionResult)new OkObjectResult(mapped);
+            return (TOutput)(IActionResult)new OkObjectResult(secrets);
         }
     }
 }
